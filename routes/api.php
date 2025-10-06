@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TypeChambreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +22,15 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/services', [ServiceController::class, 'store']);
+Route::get('/services', [ServiceController::class, 'index']);
+Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
+Route::put('/services/{id}', [ServiceController::class, 'update']);
+
+Route::post('/typechambre', [TypeChambreController::class,'store']);
+
+
 
 
 Route::post('/users', function (Request $request) {
