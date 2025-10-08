@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\DTOs\ServiceDTO;
+use App\Domain\DTOs\Service\ServiceInputDTO;
 use App\Application\UseCases\Service\CreateService;
 use App\Application\UseCases\Service\DeleteService;
 use App\Application\UseCases\Service\GetAllService;
@@ -33,7 +34,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request,CreateService $useCase)
     {
-       $dto = new ServiceDTO($request->nom , $request->description);
+       $dto = new ServiceInputDTO($request->nom , $request->description);
 
        return response()->json($useCase->execute($dto));
     }
@@ -59,7 +60,7 @@ class ServiceController extends Controller
      */
     public function update(Request $request, string $id,UpdateService $useCase)
     {
-      $dto = new ServiceDTO($request->nom,$request->description);
+      $dto = new ServiceInputDTO($request->nom,$request->description);
       return response()->json($useCase->execute($id,$dto));
     }
 

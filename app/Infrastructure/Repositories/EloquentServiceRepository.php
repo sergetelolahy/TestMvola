@@ -5,6 +5,7 @@ namespace App\Infrastructure\Repositories;
 use App\Models\ServiceModel;
 use App\Domain\Entities\Service;
 use App\Domain\Contracts\ServiceRepository;
+use App\Domain\DTOs\Service\ServiceInputDTO;
 use App\Domain\DTOs\ServiceDTO;
 
 class EloquentServiceRepository implements ServiceRepository{
@@ -19,12 +20,12 @@ class EloquentServiceRepository implements ServiceRepository{
         return $m ? new Service($m->id, $m->nom, $m->description) : null;
     }
 
-    public function save(ServiceDTO $dto): Service {
+    public function save(ServiceInputDTO $dto): Service {
         $m = ServiceModel::create(["nom" => $dto->nom, "description" => $dto->description]);
         return new Service($m->id, $m->nom, $m->description);
     }
 
-    public function update(int $id,ServiceDTO $dto): Service {
+    public function update(int $id,ServiceInputDTO $dto): Service {
         $m = ServiceModel::find($id);
         $m->update([
             'nom' => $dto->nom,

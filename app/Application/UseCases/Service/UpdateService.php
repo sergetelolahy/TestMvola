@@ -2,9 +2,8 @@
 
 namespace App\Application\UseCases\Service;
 
-use App\Domain\Entities\Service;
 use App\Domain\Contracts\ServiceRepository;
-use App\Domain\DTOs\ServiceDTO;
+use App\Domain\DTOs\Service\ServiceInputDTO;
 
 class UpdateService {
   public ServiceRepository $repository;
@@ -14,7 +13,7 @@ class UpdateService {
     $this->repository = $repository;
   }
 
-  public function execute(int $id,ServiceDTO $dto)
+  public function execute(int $id,ServiceInputDTO $dto)
   {
     return $this->repository->update($id , $dto);
   }

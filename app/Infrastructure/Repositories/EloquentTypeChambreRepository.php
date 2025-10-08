@@ -7,6 +7,7 @@ use App\Models\TypeChambreModel;
 use App\Domain\DTOs\TypeChambreDTO;
 use App\Domain\Entities\TypeChambre;
 use App\Domain\Contracts\TypeChambreRepository;
+use App\Domain\DTOs\TypeChambre\TypeChambreInputDTO;
 
 class EloquentTypeChambreRepository implements TypeChambreRepository
 {
@@ -21,12 +22,12 @@ class EloquentTypeChambreRepository implements TypeChambreRepository
         return $m ? new TypeChambre($m->id, $m->nom, $m->nbrLit, $m->maxPersonnes, $m->description) : null;
     }
 
-    public function save(TypeChambreDTO $dto): TypeChambre {
+    public function save(TypeChambreInputDTO $dto): TypeChambre {
         $m = TypeChambreModel::create(["nom" => $dto->nom,"nbrLit" => $dto->nbrLit,"maxPersonnes" => $dto->maxPersonnes, "description" => $dto->description]);
         return new TypeChambre($m->id, $m->nom, $m->nbrLit, $m->maxPersonnes, $m->description);
     }
 
-    public function update(int $id,TypeChambreDTO $dto): TypeChambre {
+    public function update(int $id,TypeChambreInputDTO $dto): TypeChambre {
         $m = TypeChambreModel::find($id);
         $m->update([
             'nom' => $dto->nom,

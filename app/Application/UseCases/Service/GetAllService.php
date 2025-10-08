@@ -3,7 +3,8 @@
 namespace App\Application\UseCases\Service;
 
 use App\Domain\Contracts\ServiceRepository;
-use App\Domain\DTOs\ServiceDTO;
+use App\Domain\DTOs\Service\ServiceOutputDTO;
+
 
 class GetAllService {
     public ServiceRepository $repository;
@@ -16,6 +17,6 @@ class GetAllService {
     public function execute(): array
     {
       $entities = $this->repository->getAll();
-      return array_map(fn($e) => new ServiceDTO($e->id,$e->nom,$e->description),$entities);
+      return array_map(fn($e) => new ServiceOutputDTO($e->id,$e->nom,$e->description),$entities);
     }
 }

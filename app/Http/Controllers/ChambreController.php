@@ -3,15 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Domain\DTOs\ChambreDTO;
+use App\Domain\DTOs\Chambre\ChambreInputDTO;
+use App\Application\UseCases\Chambre\CreateChambre;
+use App\Application\UseCases\Chambre\DeleteChambre;
+use App\Application\UseCases\Chambre\GetAllChambre;
+use App\Application\UseCases\Chambre\UpdateChambre;
 
 class ChambreController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetAllChambre $useCase)
     {
-        //
+        return response()->json($useCase->execute());
     }
 
     /**
@@ -19,15 +25,18 @@ class ChambreController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,CreateChambre $useCase)
     {
-        //
+       
+            $dto = new ChambreInputDTO($request->numero, $request->prix ,$request->typechambre_id);
+            return response()->json($useCase->execute($dto));
+        
     }
 
     /**
@@ -49,16 +58,17 @@ class ChambreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id,UpdateChambre $useCase)
     {
-        //
+        $dto = new ChambreInputDTO($request->numero,$request->prix,$request->typechambre_id);
+        return response()->json($useCase->execute($id,$dto));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,DeleteChambre $useCase)
     {
-        //
+        return response()->json(['delete' => $useCase->execute($id)]); 
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChambreController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TypeChambreController;
 
@@ -29,6 +30,17 @@ Route::delete('/services/{id}', [ServiceController::class, 'destroy']);
 Route::put('/services/{id}', [ServiceController::class, 'update']);
 
 Route::post('/typechambre', [TypeChambreController::class,'store']);
+Route::get('/typechambre', [TypeChambreController::class, 'index']);
+Route::delete('/typechambre/{id}', [TypeChambreController::class, 'destroy']);
+Route::put('/typechambre/{id}', [TypeChambreController::class, 'update']);
+
+Route::post('/chambre', [ChambreController::class,'store']);
+Route::get('/chambre', [ChambreController::class, 'index']);
+Route::delete('/chambre/{id}', [ChambreController::class, 'destroy']);
+Route::put('/chambre/{id}', [ChambreController::class, 'update']);
+
+
+
 
 
 

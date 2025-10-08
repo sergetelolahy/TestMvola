@@ -4,6 +4,7 @@ namespace App\Application\UseCases\TypeChambre;
 
 use App\Domain\DTOs\TypeChambreDTO;
 use App\Domain\Contracts\TypeChambreRepository;
+use App\Domain\DTOs\TypeChambre\TypeChambreInputDTO;
 
 
 class CreateTypeChambre {
@@ -14,7 +15,7 @@ class CreateTypeChambre {
       $this->Repository = $Repository;
     }
 
-    public function execute(TypeChambreDTO $dto)
+    public function execute(TypeChambreInputDTO $dto)
     {
       return $this->Repository->save($dto);
     }

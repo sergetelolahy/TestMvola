@@ -3,8 +3,7 @@
 namespace App\Application\UseCases\Service;
 
 use App\Domain\Contracts\ServiceRepository;
-use App\Domain\DTOs\ServiceDTO;
-use App\Domain\Entities\Service;
+use App\Domain\DTOs\Service\ServiceInputDTO;
 
 class CreateService {
   private ServiceRepository $repository;
@@ -14,7 +13,7 @@ class CreateService {
     $this->repository = $repository;
   }
 
-  public function execute(ServiceDTO $dto)
+  public function execute(ServiceInputDTO $dto)
   {
     return $this->repository->save($dto);
   }

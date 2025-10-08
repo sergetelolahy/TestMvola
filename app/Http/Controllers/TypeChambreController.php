@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Domain\DTOs\TypeChambreDTO;
+
+use App\Domain\DTOs\TypeChambre\TypeChambreInputDTO;
 use App\Application\UseCases\TypeChambre\CreateTypeChambre;
+use App\Application\UseCases\TypeChambre\DeleteTypeChambre;
+use App\Application\UseCases\TypeChambre\GetAllTypeChambre;
+use App\Application\UseCases\TypeChambre\UpdateTypeChambre;
 
 class TypeChambreController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetAllTypeChambre $useCase)
     {
-        //
+        return response()->json($useCase->execute());
     }
 
     /**
@@ -30,7 +34,7 @@ class TypeChambreController extends Controller
      */
     public function store(Request $request,CreateTypeChambre $useCase)
     {
-        $dto = new TypeChambreDTO($request->nom, $request->nbrLit ,$request->maxPersonnes,$request->description);
+        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit ,$request->maxPersonnes,$request->description);
         return response()->json($useCase->execute($dto));
     }
 
@@ -53,16 +57,17 @@ class TypeChambreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id,UpdateTypeChambre $useCase)
     {
-        //
+        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit, $request->maxPersonnes, $request->description);
+        return response()->json($useCase->execute($id,$dto));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,DeleteTypeChambre $useCase)
     {
-        //
+        return response()->json(['delete' => $useCase->execute($id)]);
     }
 }
