@@ -34,8 +34,15 @@ class ChambreController extends Controller
     public function store(Request $request,CreateChambre $useCase)
     {
        
-            $dto = new ChambreInputDTO($request->numero, $request->prix ,$request->typechambre_id);
-            return response()->json($useCase->execute($dto));
+        $dto = new ChambreInputDTO(
+            $request->numero,
+            $request->prix,
+            $request->typechambre_id,
+            $request->services ?? [] // 🔹 services facultatifs
+        );
+    
+        // Exécuter le use case
+        return response()->json($useCase->execute($dto));
         
     }
 
@@ -60,7 +67,7 @@ class ChambreController extends Controller
      */
     public function update(Request $request, string $id,UpdateChambre $useCase)
     {
-        $dto = new ChambreInputDTO($request->numero,$request->prix,$request->typechambre_id);
+        $dto = new ChambreInputDTO($request->numero,$request->prix,$request->typechambre_id,$request->services ?? []);
         return response()->json($useCase->execute($id,$dto));
     }
 

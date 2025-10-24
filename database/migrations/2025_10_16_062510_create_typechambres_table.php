@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('nbrLit'); // Nombre de lits
             $table->integer('maxPersonnes'); // Capacité max
             $table->text('description')->nullable(); // Optionnel
+            $table->string('image')->nullable(); // 🆕 Chemin ou nom du fichier image
             $table->timestamps();
         });
     }

@@ -5,7 +5,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ChambreController;
+use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\TypeChambreController;
 
@@ -38,6 +41,22 @@ Route::post('/chambre', [ChambreController::class,'store']);
 Route::get('/chambre', [ChambreController::class, 'index']);
 Route::delete('/chambre/{id}', [ChambreController::class, 'destroy']);
 Route::put('/chambre/{id}', [ChambreController::class, 'update']);
+
+Route::post('/client', [ClientController::class,'store']);
+Route::get('/client', [ClientController::class, 'index']);
+Route::delete('/client/{id}', [ClientController::class, 'destroy']);
+Route::put('/client/{id}', [ClientController::class, 'update']);
+
+Route::post('/paiement', [PaiementController::class,'store']);
+
+
+Route::post('/reservation', [ReservationController::class,'store']);
+Route::get('/reservation', [ReservationController::class, 'index']);
+
+
+
+
+
 
 
 

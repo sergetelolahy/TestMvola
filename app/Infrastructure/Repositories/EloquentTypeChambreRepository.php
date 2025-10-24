@@ -4,7 +4,6 @@ namespace App\Infrastructure\Repositories;
 
 
 use App\Models\TypeChambreModel;
-use App\Domain\DTOs\TypeChambreDTO;
 use App\Domain\Entities\TypeChambre;
 use App\Domain\Contracts\TypeChambreRepository;
 use App\Domain\DTOs\TypeChambre\TypeChambreInputDTO;

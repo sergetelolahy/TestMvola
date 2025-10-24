@@ -11,4 +11,9 @@ class ServiceModel extends Model
 
     protected $table = "services";
     protected $fillable = ["nom", "description"];
+
+    public function chambres()
+    {
+        return $this->belongsToMany(ChambreModel::class, 'chambre_service','chambre_id', 'service_id');
+    }
 }

@@ -8,15 +8,18 @@ class ChambreInputDTO
     public string $numero;
     public float $prix;
     public int $typechambre_id;
+    public array $services;
 
     public function __construct(
         string $numero,
         float $prix,
-        int $typechambre_id
+        int $typechambre_id,
+        array $services = []
     ) {
 
         $this->numero = $numero;
         $this->prix = $prix;
         $this->typechambre_id = $typechambre_id;
+        $this->services = $services;
     }
 }
