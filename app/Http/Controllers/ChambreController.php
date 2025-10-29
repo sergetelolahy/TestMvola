@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Domain\DTOs\ChambreDTO;
+use Illuminate\Http\JsonResponse;
 use App\Domain\DTOs\Chambre\ChambreInputDTO;
 use App\Application\UseCases\Chambre\CreateChambre;
 use App\Application\UseCases\Chambre\DeleteChambre;
 use App\Application\UseCases\Chambre\GetAllChambre;
 use App\Application\UseCases\Chambre\UpdateChambre;
+use App\Application\UseCases\Chambre\GetChambreDisponible;
 
 class ChambreController extends Controller
 {
@@ -77,5 +79,26 @@ class ChambreController extends Controller
     public function destroy(string $id,DeleteChambre $useCase)
     {
         return response()->json(['delete' => $useCase->execute($id)]); 
+    }
+
+    public function chambresDisponiblesAujourdhui(GetChambreDisponible $useCase): JsonResponse
+    {
+        try {
+            $chambres = $useCase->executeAujourdhui();
+
+            return response()->json([
+                'success' => true,
+                'date_recherche' => now()->format('Y-m-d'),
+                'chambres_disponibles' => $chambres,
+                'total' => count($chambres)
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des chambres disponibles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

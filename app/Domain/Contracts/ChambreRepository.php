@@ -13,4 +13,7 @@ interface ChambreRepository {
     public function save(ChambreInputDTO $dto ): array;
     public function update(int $id,ChambreInputDTO $dto): array;
     public function delete(int $id): bool;
+
+    public function getChambresDisponibles(string $dateDebut, string $dateFin): array;
+    public function getChambresDisponiblesAujourdhui(): array;
 }

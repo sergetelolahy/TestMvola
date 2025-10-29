@@ -10,7 +10,7 @@ class TypeChambreModel extends Model
 {
     use HasFactory;
     protected $table = 'typechambres';
-    protected $fillable = ["nom", "nbrLit","maxPersonnes","description"];
+    protected $fillable = ["nom", "nbrLit","maxPersonnes","description","image"];
 
     public function chambres(): HasMany
     {

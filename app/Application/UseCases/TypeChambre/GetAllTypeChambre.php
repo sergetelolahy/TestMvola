@@ -17,6 +17,6 @@ class GetAllTypeChambre {
     public function execute(): array
     {
       $entities = $this->repository->getAll();
-      return array_map(fn($e) => new TypeChambreOutputDTO($e->id,$e->nom,$e->nbrLit,$e->maxPersonnes,$e->description),$entities);
+      return array_map(fn($e) => new TypeChambreOutputDTO($e->id,$e->nom,$e->nbrLit,$e->maxPersonnes,$e->description,$e->image),$entities);
     }
 }

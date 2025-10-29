@@ -5,7 +5,9 @@ namespace App\Infrastructure\Repositories;
 use services;
 use Exception;
 use App\Models\ChambreModel;
+use Illuminate\Support\Carbon;
 use App\Domain\Entities\Chambre;
+use App\Models\ReservationModel;
 use App\Domain\Contracts\ChambreRepository;
 use App\Domain\DTOs\Chambre\ChambreInputDTO;
 
@@ -26,6 +28,7 @@ class EloquentChambreRepository implements ChambreRepository
                 'nbrLit' => $c->typechambre->nbrLit,
                 'maxPersonnes' => $c->typechambre->maxPersonnes,
                 'description' => $c->typechambre->description,
+                'image' => $c->typechambre->image
             ],
             'services' => $c->services->map(fn($service) => [
                 'id' => $service->id,
@@ -149,6 +152,7 @@ public function update(int $id, ChambreInputDTO $dto): array {
             'nbrLit' => $m->typechambre->nbrLit,
             'maxPersonnes' => $m->typechambre->maxPersonnes,
             'description' => $m->typechambre->description,
+            'image' => $m->typechambre->image
         ],
         'services' => $m->services->map(fn($service) => [
             'id' => $service->id,
@@ -162,4 +166,98 @@ public function update(int $id, ChambreInputDTO $dto): array {
     public function delete(int $id): bool {
         return ChambreModel::destroy($id) > 0;
     }
+
+    public function getChambresDisponibles(string $dateDebut, string $dateFin): array {
+        try {
+            // Récupérer les IDs des chambres réservées pendant cette période
+            $chambresReservees = ReservationModel::where(function($query) use ($dateDebut, $dateFin) {
+                    // Les réservations qui chevauchent la période demandée
+                    $query->where(function($q) use ($dateDebut, $dateFin) {
+                            $q->where('date_debut', '<=', $dateFin)
+                              ->where('date_fin', '>=', $dateDebut);
+                        });
+                })
+                ->whereIn('statut', ['confirmée', 'en cours', 'check-in'])
+                ->pluck('id_chambre')
+                ->unique()
+                ->toArray();
+
+            // Récupérer les chambres disponibles (celles qui ne sont pas dans la liste des réservées)
+            $chambres = ChambreModel::with(['typechambre', 'services'])
+                ->whereNotIn('id', $chambresReservees)
+                ->get();
+
+            return $chambres->map(function($c) {
+                return [
+                    'id' => $c->id,
+                    'numero' => $c->numero,
+                    'prix' => $c->prix,
+                    'type' => [
+                        'id' => $c->typechambre->id,
+                        'nom' => $c->typechambre->nom,
+                        'nbrLit' => $c->typechambre->nbrLit,
+                        'maxPersonnes' => $c->typechambre->maxPersonnes,
+                        'description' => $c->typechambre->description,
+                        'image' => $c->typechambre->image
+                    ],
+                    'services' => $c->services->map(fn($service) => [
+                        'id' => $service->id,
+                        'nom' => $service->nom,
+                        'description' => $service->description,
+                    ])->toArray()
+                ];
+            })->toArray();
+
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des chambres disponibles: " . $e->getMessage());
+        }
+    }
+
+    public function getChambresDisponiblesAujourdhui(): array {
+        try {
+            $aujourdhui = Carbon::now()->format('Y-m-d');
+            
+            // Récupérer les IDs des chambres réservées aujourd'hui
+            $chambresReservees = ReservationModel::where(function($query) use ($aujourdhui) {
+                    // Les réservations qui couvrent la date d'aujourd'hui
+                    $query->where('date_debut', '<=', $aujourdhui)
+                          ->where('date_fin', '>=', $aujourdhui);
+                })
+                ->whereIn('statut', ['confirmée', 'en cours', 'check-in'])
+                ->pluck('id_chambre')
+                ->unique()
+                ->toArray();
+
+            // Récupérer les chambres disponibles
+            $chambres = ChambreModel::with(['typechambre', 'services'])
+                ->whereNotIn('id', $chambresReservees)
+                ->get();
+
+            return $chambres->map(function($c) {
+                return [
+                    'id' => $c->id,
+                    'numero' => $c->numero,
+                    'prix' => $c->prix,
+                    'status' => 'libres',
+                    'type' => [
+                        'id' => $c->typechambre->id,
+                        'nom' => $c->typechambre->nom,
+                        'nbrLit' => $c->typechambre->nbrLit,
+                        'maxPersonnes' => $c->typechambre->maxPersonnes,
+                        'description' => $c->typechambre->description,
+                        'image' => $c->typechambre->image
+                    ],
+                    'services' => $c->services->map(fn($service) => [
+                        'id' => $service->id,
+                        'nom' => $service->nom,
+                        'description' => $service->description,
+                    ])->toArray()
+                ];
+            })->toArray();
+
+        } catch (Exception $e) {
+            throw new Exception("Erreur lors de la récupération des chambres disponibles aujourd'hui: " . $e->getMessage());
+        }
+    }
+
 }

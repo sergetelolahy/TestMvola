@@ -34,7 +34,7 @@ class TypeChambreController extends Controller
      */
     public function store(Request $request,CreateTypeChambre $useCase)
     {
-        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit ,$request->maxPersonnes,$request->description);
+        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit ,$request->maxPersonnes,$request->description,$request->image);
         return response()->json($useCase->execute($dto));
     }
 
@@ -59,7 +59,7 @@ class TypeChambreController extends Controller
      */
     public function update(Request $request, string $id,UpdateTypeChambre $useCase)
     {
-        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit, $request->maxPersonnes, $request->description);
+        $dto = new TypeChambreInputDTO($request->nom, $request->nbrLit, $request->maxPersonnes, $request->description,$request->image);
         return response()->json($useCase->execute($id,$dto));
     }
 
