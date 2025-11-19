@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ChambreModel extends Model
 {
@@ -26,9 +27,15 @@ class ChambreModel extends Model
         return $this->belongsToMany(ServiceModel::class, 'chambre_service','chambre_id', 'service_id');
     }
 
-    public function reservations(): HasMany
+    public function reservations(): BelongsToMany
     {
-        return $this->hasMany(Reservation::class, 'id_chambre');
+        return $this->belongsToMany(
+            ReservationModel::class, // Utiliser ReservationModel, pas Reservation
+            'chambre_reservation',   // Nom de la table pivot
+            'chambre_id',            // Clé étrangère de chambre dans la table pivot
+            'reservation_id'         // Clé étrangère de réservation dans la table pivot
+        )->withPivot(['date_debut', 'date_fin', 'prix'])
+         ->withTimestamps();
     }
     
 }

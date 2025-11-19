@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Domain\Contracts\ClientRepository;
 use App\Domain\Contracts\ChambreRepository;
@@ -44,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+    Schema::disableForeignKeyConstraints();
+    Schema::enableForeignKeyConstraints();
     }
 }

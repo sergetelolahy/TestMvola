@@ -19,16 +19,6 @@ class GetAllPaiement {
 {
     $entities = $this->repository->getAll();
 
-    return array_map(
-        fn($e) => new PaiementOutputDTO(
-            $e->id,
-            $e->id_reservation,
-            $e->montant,
-            $e->date_paiement,
-            $e->mode_paiement,
-            $e->status
-        ),
-        $entities
-    );
+    return $entities;
 }
 }

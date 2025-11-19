@@ -29,18 +29,33 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,CreateReservation $useCase)
+    public function store(Request $request, CreateReservation $useCase)
     {
+        $chambres = $request->id_chambre;
+    
+        // Si c'est une chaîne, on la split par les virgules
+        if (is_string($chambres)) {
+            $chambres = explode(',', $chambres);
+        }
+    
+        // S'assurer que c'est un tableau
+        if (!is_array($chambres)) {
+            $chambres = [$chambres];
+        }
+    
+        // Convertir en entiers
+        $chambres = array_map('intval', $chambres);
+    
         $dto = new ReservationInputDTO(
-            $request->id_client,
-            $request->id_chambre,
+            (int) $request->id_client,
+            $request->id_chambre, // On garde la version originale pour compatibilité, mais le DTO utilise le tableau $chambres
             $request->date_debut,
             $request->date_fin,
-            $request->tarif_template
+            $chambres
         );
+    
         return response()->json($useCase->execute($dto));
     }
-
     /**
      * Display the specified resource.
      */

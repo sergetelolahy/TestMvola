@@ -15,20 +15,22 @@ class GetAllReservation{
 
     public function execute(): array
     {
-      $entities = $this->repository->getAll();
-      return array_map(fn($e) => new ReservationOutputDTO(
-        $e->id,
-        $e->id_client,
-        $e->id_chambre,
-        $e->date_debut,
-        $e->date_fin,
-        $e->statut,
-        $e->tarif_template,
-        $e->date_creation,
-        $e->check_in_time,
-        $e->check_out_time,
-        $e->client,   // Passer l'objet client
-        $e->chambre   // Passer l'objet chambre
-    ), $entities);
+        $entities = $this->repository->getAll();
+        return array_map(function($e) {
+            return new ReservationOutputDTO(
+                $e->id,
+                $e->id_client,
+                $e->date_debut,
+                $e->date_fin,
+                $e->statut,
+                $e->tarif_template,
+                $e->date_creation,
+                $e->check_in_time,
+                $e->check_out_time,
+                $e->client,
+                $e->chambres->toArray() // ← Conversion en tableau
+            );
+            
+        }, $entities);
     }
 }

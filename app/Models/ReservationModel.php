@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ReservationModel extends Model
 {
@@ -13,14 +14,13 @@ class ReservationModel extends Model
     protected $table = 'reservations'; 
     protected $fillable = [
         'id_client',
-        'id_chambre',
         'date_debut',
         'date_fin',
         'statut',
         'tarif_template',
         'date_creation',
         'check_in_time',
-        'check_out_time'
+        'check_out_time',
     ];
 
     protected $casts = [
@@ -37,10 +37,17 @@ class ReservationModel extends Model
         return $this->belongsTo(ClientModel::class, 'id_client');
     }
 
-    public function chambre(): BelongsTo
+    public function chambres(): BelongsToMany
     {
-        return $this->belongsTo(ChambreModel::class, 'id_chambre');
+        return $this->belongsToMany(
+            ChambreModel::class,
+            'chambre_reservation',
+            'reservation_id',
+            'chambre_id'
+        )->withPivot(['date_debut', 'date_fin', 'prix'])
+         ->withTimestamps();
     }
+
 
     // Scopes utiles
     public function scopeActive($query)

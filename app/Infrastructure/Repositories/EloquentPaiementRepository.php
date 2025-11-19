@@ -16,8 +16,9 @@ class EloquentPaiementRepository implements PaiementRepository
      */
     public function getAll(): array
     {
-        $paiements = PaiementModel::with('reservation')->get();
-
+        // Charger la réservation + les relations client et chambre
+        $paiements = PaiementModel::with('reservation.client', 'reservation.chambre.typechambre')->get();
+    
         return $paiements->map(fn($p) => [
             'id' => $p->id,
             'id_reservation' => $p->id_reservation,
@@ -25,15 +26,46 @@ class EloquentPaiementRepository implements PaiementRepository
             'date_paiement' => $p->date_paiement,
             'mode_paiement' => $p->mode_paiement,
             'status' => $p->status,
+    
+            // Relation reservation
             'reservation' => $p->reservation ? [
                 'id' => $p->reservation->id,
                 'date_debut' => $p->reservation->date_debut,
                 'date_fin' => $p->reservation->date_fin,
                 'statut' => $p->reservation->statut,
                 'tarif_template' => $p->reservation->tarif_template,
-            ] : null
+    
+                // Sous-relation client
+                'client' => $p->reservation->client ? [
+                    'id' => $p->reservation->client->id,
+                    'nom' => $p->reservation->client->nom,
+                    'prenom' => $p->reservation->client->prenom,
+                    'tel' => $p->reservation->client->tel,
+                    'email' => $p->reservation->client->email,
+                ] : null,
+    
+                // Sous-relation chambre
+                'chambre' => $p->reservation->chambre ? [
+                    'id' => $p->reservation->chambre->id,
+                    'numero' => $p->reservation->chambre->numero,
+                    'type' => $p->reservation->chambre->typechambre_id,
+                    'prix' => $p->reservation->chambre->prix,
+
+                    'typechambre' => $p->reservation->chambre->typeChambre ? [
+                        'id' => $p->reservation->chambre->typeChambre->id,
+                        'nom' => $p->reservation->chambre->typeChambre->nom,
+                        'nbrLit' => $p->reservation->chambre->typeChambre->nbrLit,
+                        'maxPersonnes' => $p->reservation->chambre->typeChambre->maxPersonnes,
+                        'description' => $p->reservation->chambre->typeChambre->description,
+                        'image' => $p->reservation->chambre->typeChambre->image,
+                    ] : null,
+                ] : null,
+
+                
+            ] : null,
         ])->toArray();
     }
+    
 
     /**
      * Trouver un paiement par son ID

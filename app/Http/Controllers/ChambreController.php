@@ -101,4 +101,35 @@ class ChambreController extends Controller
             ], 500);
         }
     }
+
+    public function chambresDisponibles(Request $request, GetChambreDisponible $useCase): JsonResponse
+    {
+        try {
+            $dateDebut = $request->input('date_debut');
+            $dateFin = $request->input('date_fin');
+
+            $chambres = $useCase->execute($dateDebut, $dateFin);
+
+            return response()->json([
+                'success' => true,
+                'date_debut' => $dateDebut,
+                'date_fin' => $dateFin,
+                'chambres_disponibles' => $chambres,
+                'total' => count($chambres)
+            ]);
+
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la récupération des chambres disponibles',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

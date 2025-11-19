@@ -43,6 +43,9 @@ Route::get('/chambre', [ChambreController::class, 'index']);
 Route::delete('/chambre/{id}', [ChambreController::class, 'destroy']);
 Route::put('/chambre/{id}', [ChambreController::class, 'update']);
 Route::get('/chambre/disponibles/aujourdhui', [ChambreController::class, 'chambresDisponiblesAujourdhui']);
+Route::post('/chambre/disponibles', [ChambreController::class,'chambresDisponibles']);
+
+
 
 Route::post('/client', [ClientController::class,'store']);
 Route::get('/client', [ClientController::class, 'index']);
@@ -50,6 +53,8 @@ Route::delete('/client/{id}', [ClientController::class, 'destroy']);
 Route::put('/client/{id}', [ClientController::class, 'update']);
 
 Route::post('/paiement', [PaiementController::class,'store']);
+Route::get('/paiement', [PaiementController::class, 'index']);
+
 
 
 Route::post('/reservation', [ReservationController::class,'store']);

@@ -32,7 +32,8 @@ class EloquentTypeChambreRepository implements TypeChambreRepository
             'nom' => $dto->nom,
             'nbrLit' => $dto->nbrLit,
             'maxPersonnes' => $dto->maxPersonnes,
-            'description' => $dto->description
+            'description' => $dto->description,
+            'image' => $dto->image,
         ]);
         return new TypeChambre($m->id, $m->nom, $m->nbrLit, $m->maxPersonnes, $m->description,$m->image);
     }

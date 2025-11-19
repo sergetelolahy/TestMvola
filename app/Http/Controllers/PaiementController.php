@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Application\UseCases\Paiement\CreatePaiement;
-use App\Domain\DTOs\Paiement\PaiementInputDTO;
 use Illuminate\Http\Request;
+use App\Domain\DTOs\Paiement\PaiementInputDTO;
+use App\Application\UseCases\Paiement\CreatePaiement;
+use App\Application\UseCases\Paiement\GetAllPaiement;
 
 class PaiementController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(GetAllPaiement $useCase)
     {
-        //
+        return response()->json($useCase->execute());
     }
 
     /**
